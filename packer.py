@@ -31,6 +31,7 @@ KEYWORDS = set(
     "_Decimal64|_Generic|_Imaginary|_Noreturn|_Static_assert|_Thread_local|NULL|TRUE|FALSE".split("|")
 )
 REGEX_IDENTIFIER = re.compile(r"[_a-zA-Z][_a-zA-Z0-9]*")
+PREPROC = "#if, #ifdef, #ifndef, #else, #elif, #elifdef, #elifndef, #endif, #define, #undef".split(", ")
 
 
 def use_source(path: str):
@@ -38,9 +39,10 @@ def use_source(path: str):
     G_CURRENT_PACKAGE = os.path.basename(path)
     try:
         shutil.rmtree(TEMP)
+        os.rmdir(TEMP)
     except OSError:
         pass
-    shutil.copytree(os.path.join(LIBS, path), TEMP)
+    shutil.copytree(os.path.join(LIBS, path), TEMP, dirs_exist_ok=True)
     os.chdir(TEMP)
 
 
@@ -60,7 +62,7 @@ def rename(filename: str, renames: Iterable[Tuple[str, str]]):
 
 
 # Reference: https://stackoverflow.com/a/241506
-def remove_comments_(text):
+def remove_comments_(text: str, count: int) -> str:
     def replacer(match):
         s = match.group(0)
         if s.startswith('/'):
@@ -72,19 +74,30 @@ def remove_comments_(text):
         r'//.*?$|/\*.*?\*/|\'(?:\\.|[^\\\'])*\'|"(?:\\.|[^\\"])*"',
         re.DOTALL | re.MULTILINE
     )
+    if count >= 1:
+        return re.subn(pattern, replacer, text, count=count)[0]
     return re.sub(pattern, replacer, text)
 
 
-def remove_comments(filename: str):
+def remove_comments(filename: str, count: int = -1):
     with open(filename, "r+", encoding="utf-8") as h:
         data = h.read()
-    data = remove_comments_(data)
+    data = remove_comments_(data, count)
     with open(filename, "w+", encoding="utf-8") as h:
         h.write(data)
 
 
 def prefix(filename: str, prefix_: str, renames: Iterable[str]):
     rename(filename, (("\\b" + re.escape(x) + "\\b", re.escape(prefix_ + x)) for x in renames))
+
+
+def copy_file(filename: str, target_name: str, is_temp=True):
+    f = os.path.join(TEMP, filename)
+    if is_temp:
+        t = os.path.join(TEMP, target_name)
+    else:
+        t = os.path.join(OUTPUT_DIR, target_name)
+    shutil.copy(f, t)
 
 
 def preprocess(filename: str, target: str, is_temp=True, args=("-M",)):
@@ -104,10 +117,13 @@ def extract_ids(filename: str) -> Set[str]:
         code = h.readlines()
         for line in code:
             ls = line.strip()
-            if not ls.startswith("#define"):
+            for p in PREPROC:
+                if ls.startswith(p):
+                    ls = ls[len(p):]
+                    break
+            else:
                 continue
-            define = ls[len("#define"):]
-            for ident in REGEX_IDENTIFIER.findall(define):
+            for ident in REGEX_IDENTIFIER.findall(ls):
                 defines.append(ident)
     arguments = [ID_EXTRACTOR, to_read]
     data: str = subprocess.check_output(arguments, encoding="utf-8", universal_newlines=True)
@@ -154,6 +170,7 @@ GLOBAL_DICT = {
     "preprocess": preprocess,
     "extract_ids": extract_ids,
     "remove_comments": remove_comments,
+    "copy_file": copy_file,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
 }
