@@ -1,0 +1,14 @@
+diff --git a/usecpp.c b/usecpp.c
+index 3611ed2..90903af 100644
+--- a/usecpp.c
++++ b/usecpp.c
+@@ -157,9 +157,6 @@ int main(int argc, char **argv)
+ #endif
+   tagptr++;
+ 
+-  if(GetPrefs(&tagptr, &dealloc))
+-    return(0);
+-
+   if( !(i = SetOptions(argc, argv, &tagptr)))
+     return(0);
+   

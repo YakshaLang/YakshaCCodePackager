@@ -1,0 +1,5 @@
+temp/delete_me
+.venv
+cmake-build-debug
+*.exe
+.idea

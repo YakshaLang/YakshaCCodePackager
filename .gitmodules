@@ -1,0 +1,18 @@
+[submodule "libs/sds"]
+	path = libs/sds
+	url = git@github.com:antirez/sds.git
+[submodule "3rd/python-patch"]
+	path = 3rd/python-patch
+	url = git@github.com:techtonik/python-patch.git
+[submodule "3rd/libs"]
+	path = 3rd/libs
+	url = git@github.com:ApoorvaJ/libs.git
+[submodule "3rd/pycparser"]
+	path = 3rd/pycparser
+	url = git@github.com:eliben/pycparser.git
+[submodule "3rd/fcpp"]
+	path = 3rd/fcpp
+	url = git@github.com:bagder/fcpp.git
+[submodule "libs/stb"]
+	path = libs/stb
+	url = git@github.com:nothings/stb.git
