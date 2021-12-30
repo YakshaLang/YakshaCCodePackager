@@ -1,0 +1,45 @@
+diff --git a/scripts/single_header_packer.py b/scripts/single_header_packer.py
+index 5e3b2dd..db5859d 100644
+--- a/scripts/single_header_packer.py
++++ b/scripts/single_header_packer.py
+@@ -115,24 +115,26 @@ if macro == "":
+ 
+ # Print concatenated output
+ # -------------------------
+-print(os.linesep * 2 + "/*")
+-for f in intro_files:
+-    sys.stdout.write(open(f, 'r').read())
+-print("*/")
+-
+-print(os.linesep + "#ifndef " + macro + "_SINGLE_HEADER");
+-print("#define " + macro + "_SINGLE_HEADER");
++if intro_files:
++    print("/*")
++    for f in intro_files:
++        sys.stdout.write(open(f, 'r').read())
++    print("*/")
++
++print(os.linesep + "#ifndef " + macro + "_SINGLE_HEADER")
++print("#define " + macro + "_SINGLE_HEADER")
+ for f in pub_files:
+     sys.stdout.write(open(f, 'r').read())
+-print("#endif /* " + macro + "_SINGLE_HEADER */");
++print("#endif /* " + macro + "_SINGLE_HEADER */")
+ 
+-print(os.linesep + "#ifdef " + macro + "_IMPLEMENTATION");
++print(os.linesep + "#ifdef " + macro + "_IMPLEMENTATION")
+ for f in priv_files:
+     print(omit_includes(open(f, 'r').read(),
+                         pub_files + priv_files))
+-print("#endif /* " + macro + "_IMPLEMENTATION */");
++print("#endif /* " + macro + "_IMPLEMENTATION */")
+ 
+-print(os.linesep + "/*")
+-for f in outro_files:
+-    sys.stdout.write(open(f, 'r').read())
+-print("*/" + os.linesep)
++if outro_files:
++    print(os.linesep + "/*")
++    for f in outro_files:
++        sys.stdout.write(open(f, 'r').read())
++    print("*/" + os.linesep)
