@@ -2,7 +2,7 @@ use_source("sds")
 pack(public="sds.h", private="sdsalloc.h,sds.c", target="sds_temp.h")
 ids = extract_ids("sds_temp.h")
 P = [x for x in ids if x.startswith("sds") or x.startswith("s_")]
-PU = [x for x in ids if x.startswith("SDS")]
+PU = [x for x in ids if x.startswith("SDS")] + ["__SDS_H"]
 prefix("sds.h", PREFIX, P)
 prefix("sdsalloc.h", PREFIX, P)
 prefix("sds.c", PREFIX, P)
@@ -13,7 +13,7 @@ FILENAME_FIXES = [["yk__sds\\.h", "sds.h"], ["yk__sdsalloc\\.h", "sdsalloc.h"]]
 rename("sds.c", FILENAME_FIXES)
 rename("sds.h", FILENAME_FIXES)
 rename("sdsalloc.h", FILENAME_FIXES)
-remove_comments("sds.c")
-remove_comments("sds.h")
-remove_comments("sdsalloc.h")
+remove_comments("sds.c", 1)
+remove_comments("sds.h", 1)
+remove_comments("sdsalloc.h", 1)
 pack(intro_files="LICENSE", public="sds.h", private="sdsalloc.h,sds.c", target="yk__sds.h", is_temp=False)

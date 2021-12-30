@@ -17,4 +17,5 @@ add_executable(cids tools/cids.c)
 
 # ============ Tests ================
 include_directories("output")
-add_executable(sds_include_test tests/sds_include_test.c)
+add_executable(sds_test tests/sds_test.c)
+add_executable(stb_ds_test tests/stb_ds_test.c)
