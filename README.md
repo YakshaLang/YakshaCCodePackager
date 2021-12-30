@@ -21,6 +21,7 @@
   * I needed to patch `fcpp` with `fcpp.patch` so it worked for me in Windows.
     * This needs to be compiled
   * `libs` - Apoorva Joshi's single header packer (used in pack function above)
+    * Apply `libs.patch`
   * `python-patch` - techtonik's patch script
 * Tools
   * `cids` - extract c identifiers (ignores preprocessor)
