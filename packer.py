@@ -160,6 +160,16 @@ def pack(intro_files: str = "", macro: str = None, private: str = "",
         h.write(data)
 
 
+def clang_format(filename: str, is_temp=True):
+    if is_temp:
+        f = os.path.join(TEMP, filename)
+    else:
+        f = os.path.join(OUTPUT_DIR, filename)
+    arguments = ["clang-format", "-style=file", "-i", f]
+    subprocess.run(arguments,
+                   stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=True)
+
+
 GLOBAL_DICT = {
     "__builtins__": builtins,
     "use_source": use_source,
@@ -171,6 +181,7 @@ GLOBAL_DICT = {
     "extract_ids": extract_ids,
     "remove_comments": remove_comments,
     "copy_file": copy_file,
+    "clang_format": clang_format,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
 }

@@ -9,3 +9,4 @@ REPLACE_FIXES = [[r"http://nothings\\.org/yk__stb_ds", "http://nothings.org/stb_
                  ["stb_ds\\.h", "yk__stb_ds.h"]]
 rename("stb_ds.h", REPLACE_FIXES)
 copy_file("stb_ds.h", "yk__stb_ds.h", is_temp=False)
+clang_format("yk__stb_ds.h", is_temp=False)
