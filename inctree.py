@@ -72,6 +72,32 @@ class Tree:
             sub.append([-1, os.path.abspath(s), self.do_file(s)])
         self.tree.append([-1, ROOT, sub])
 
+    def perform_includes(self):
+        for fname in self.sources:
+            found, f = self.find(fname)
+            if not found:
+                continue
+            mp = {}
+            lines = []
+            with open(f, "r+", encoding="utf-8") as h:
+                x = remove_comments_cpp(h.read())
+            for number, line in enumerate(x.splitlines()):
+                ls = line.strip()
+                if not ls.startswith("#include"):
+                    continue
+                m, fname = extract_include_filename(ls)
+                if m != MODE_ANGLE:
+                    mp[number] = fname
+            with open(f, "r+", encoding="utf-8") as h:
+                for number, line in enumerate(h.read().splitlines()):
+                    if number in mp:
+                        lines += self.get_lines(line, mp[number])
+                    else:
+                        lines.append(line)
+            lines = [x.rstrip() for x in lines]
+            with open(f, "w+", encoding="utf-8") as h:
+                h.write("\n".join(lines))
+
     def find(self, f: str) -> (bool, str):
         # cur dir
         if os.path.isfile(f):
@@ -100,6 +126,13 @@ class Tree:
                     _, sf = self.find(fname)
                     nodes.append([number, sf, self.do_file(fname)])
         return nodes
+
+    def get_lines(self, line: str, fname: str) -> List[str]:
+        found, f = self.find(fname)
+        if not found:
+            return [line]
+        with open(f, "r+", encoding="utf-8") as h:
+            return h.read().splitlines()
 
 
 class TopologicalSort:
@@ -160,12 +193,27 @@ class TopologicalSort:
             self._get_nodes(x)
 
 
-def scan(argv: list[str]) -> list[str]:
+def parse_arguments(argv):
     parser = argparse.ArgumentParser("inctree.py", description="include tree calculator")
     parser.add_argument("-I", type=str, nargs="*", action='append')
     parser.add_argument("files", type=str, nargs="+")
     parser.add_argument("--remove-prefix", type=str, default=None, dest="rp")
     p = parser.parse_args(argv)
+    return p
+
+
+def scan(argv: list[str]) -> list[str]:
+    p = parse_arguments(argv)
+    a = get_code_tree(p)
+    a.scan()
+    t = TopologicalSort(a)
+    t.sort()
+    if p.rp:
+        t.remove_prefix(p.rp)
+    return t.sorted
+
+
+def get_code_tree(p):
     files = []
     for f in p.files:
         if '*' in f or '?' in f:
@@ -174,12 +222,13 @@ def scan(argv: list[str]) -> list[str]:
             files.append(f)
     files = sorted(files)
     a = Tree([x[0] for x in p.I], files)
-    a.scan()
-    t = TopologicalSort(a)
-    t.sort()
-    if p.rp:
-        t.remove_prefix(p.rp)
-    return t.sorted
+    return a
+
+
+def incs(argv: List[str]):
+    p = parse_arguments(argv)
+    a = get_code_tree(p)
+    a.perform_includes()
 
 
 def main():

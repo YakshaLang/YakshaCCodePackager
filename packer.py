@@ -139,6 +139,10 @@ def scan_code(args: List[str]) -> List[str]:
     return _inctree.scan(args)
 
 
+def apply_includes(args: List[str]) -> List[str]:
+    return _inctree.incs(args)
+
+
 def pack(intro_files: str = "", macro: str = None, private: str = "",
          public: str = "", target: str = None, is_temp=True):
     m = macro
@@ -189,6 +193,7 @@ GLOBAL_DICT = {
     "copy_file": copy_file,
     "clang_format": clang_format,
     "scan_code": scan_code,
+    "apply_includes": apply_includes,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
 }
