@@ -8,7 +8,9 @@ import re
 import shutil
 import subprocess
 import sys
-from typing import Iterable, Tuple, Set
+from typing import Iterable, Tuple, Set, List
+
+import inctree as _inctree
 
 PYTHON_EXE = sys.executable
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -133,6 +135,10 @@ def extract_ids(filename: str) -> Set[str]:
     return set(ids) - KEYWORDS
 
 
+def scan_code(args: List[str]) -> List[str]:
+    return _inctree.scan(args)
+
+
 def pack(intro_files: str = "", macro: str = None, private: str = "",
          public: str = "", target: str = None, is_temp=True):
     m = macro
@@ -182,6 +188,7 @@ GLOBAL_DICT = {
     "remove_comments": remove_comments,
     "copy_file": copy_file,
     "clang_format": clang_format,
+    "scan_code": scan_code,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
 }
