@@ -28,6 +28,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define YK__SDS_SINGLE_HEADER
 #ifndef YK____SDS_H
 #define YK____SDS_H
+#if _MSC_VER && !__INTEL_COMPILER
+#define __attribute__(X)
+#define ssize_t size_t
+#endif
 #define YK__SDS_MAX_PREALLOC (1024 * 1024)
 extern const char *YK__SDS_NOINIT;
 #include <sys/types.h>
