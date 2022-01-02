@@ -19,3 +19,9 @@
 [submodule "libs/libs"]
 	path = libs/libs
 	url = git@github.com:mattiasgustavsson/libs.git
+[submodule "libs/sokol"]
+	path = libs/sokol
+	url = git@github.com:floooh/sokol.git
+[submodule "libs/Nuklear"]
+	path = libs/Nuklear
+	url = https://github.com/Immediate-Mode-UI/Nuklear
