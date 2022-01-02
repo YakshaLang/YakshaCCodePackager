@@ -30,9 +30,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define YK____SDS_H
 #define YK__SDS_MAX_PREALLOC (1024 * 1024)
 extern const char *YK__SDS_NOINIT;
+#include <sys/types.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <sys/types.h>
 typedef char *yk__sds;
 /* Note: yk__sdshdr5 is never used, we just access the flags byte directly.
  * However is here to document the layout of type 5 SDS strings. */
@@ -261,12 +261,12 @@ int yk__sdsTest(int argc, char *argv[]);
 #define yk__s_malloc malloc
 #define yk__s_realloc realloc
 #define yk__s_free free
-#include <assert.h>
-#include <ctype.h>
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <assert.h>
+#include <limits.h>
 const char *YK__SDS_NOINIT = "YK__SDS_NOINIT";
 static inline int yk__sdsHdrSize(char type) {
   switch (type & YK__SDS_TYPE_MASK) {
@@ -1296,9 +1296,9 @@ void *yk__sds_realloc(void *ptr, size_t size) {
 }
 void yk__sds_free(void *ptr) { yk__s_free(ptr); }
 #if defined(YK__SDS_TEST_MAIN)
-#include "limits.h"
-#include "testhelp.h"
 #include <stdio.h>
+#include "testhelp.h"
+#include "limits.h"
 #define UNUSED(x) (void) (x)
 int yk__sdsTest(void) {
   {

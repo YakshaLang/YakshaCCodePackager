@@ -187,20 +187,20 @@ Releases the resources acquired by `yk__http_get` or `yk__http_post`. Should be 
 #include <ws2tcpip.h>
 #pragma warning(pop)
 #pragma comment(lib, "Ws2_32.lib")
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
 #define YK__HTTP_SOCKET SOCKET
 #define YK__HTTP_INVALID_SOCKET INVALID_SOCKET
 #else
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
 #define YK__HTTP_SOCKET int
 #define YK__HTTP_INVALID_SOCKET -1
 #endif
