@@ -205,6 +205,7 @@ GLOBAL_DICT = {
     "scan_code": scan_code,
     "apply_includes": apply_includes,
     "is_lower": is_lower,
+    "DO_BIG_JOBS": False,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
 }
