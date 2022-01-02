@@ -16,3 +16,6 @@
 [submodule "libs/stb"]
 	path = libs/stb
 	url = git@github.com:nothings/stb.git
+[submodule "libs/libs"]
+	path = libs/libs
+	url = git@github.com:mattiasgustavsson/libs.git
