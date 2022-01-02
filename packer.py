@@ -122,7 +122,7 @@ def preprocess(filename: str, target: str, is_temp=True, args=("-M",)):
         h.write(data)
 
 
-def extract_ids(filename: str) -> Set[str]:
+def extract_ids(filename: str, check_cids=True) -> Set[str]:
     to_read = filename  # os.path.join(TEMP, filename)
     defines = []
     with open(to_read, "r+", encoding="utf-8") as h:
@@ -138,7 +138,8 @@ def extract_ids(filename: str) -> Set[str]:
             for ident in REGEX_IDENTIFIER.findall(ls):
                 defines.append(ident)
     arguments = [ID_EXTRACTOR, to_read]
-    data: str = subprocess.check_output(arguments, encoding="utf-8", universal_newlines=True)
+    data: str = subprocess.run(arguments, stdout=subprocess.PIPE, check=check_cids,
+                               encoding="utf-8", universal_newlines=True).stdout
     ids = data.splitlines(keepends=False) + defines
     ids = [x.strip() for x in ids]
     ids = [x for x in ids if x and len(x) > 1]
