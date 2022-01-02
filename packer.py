@@ -81,6 +81,16 @@ def remove_comments_(text: str, count: int) -> str:
     return re.sub(pattern, replacer, text)
 
 
+def is_lower(s: str):
+    for x in s:
+        if x == "_":
+            continue
+        if x.islower():
+            return True
+        else:
+            return False
+
+
 def remove_comments(filename: str, count: int = -1):
     with open(filename, "r+", encoding="utf-8") as h:
         data = h.read()
@@ -194,6 +204,7 @@ GLOBAL_DICT = {
     "clang_format": clang_format,
     "scan_code": scan_code,
     "apply_includes": apply_includes,
+    "is_lower": is_lower,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
 }
