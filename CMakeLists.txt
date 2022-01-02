@@ -27,4 +27,4 @@ IF (WIN32)
 ENDIF ()
 add_executable(ini_test tests/ini_test.c)
 add_executable(thread_test tests/thread_test.c)
-
+add_executable(sk_nk_test tests/sk_nk_test.c)
