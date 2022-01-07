@@ -48,6 +48,16 @@ def use_source(path: str):
     os.chdir(TEMP)
 
 
+def use_output():
+    try:
+        shutil.rmtree(TEMP)
+        os.rmdir(TEMP)
+    except OSError:
+        pass
+    shutil.copytree(os.path.join(SCRIPT_DIR, "output"), TEMP, dirs_exist_ok=True)
+    os.chdir(TEMP)
+
+
 def patch(patch_filename: str):
     subprocess.run([PYTHON_EXE, PATCHER, os.path.join(INSTRUCTIONS, patch_filename)],
                    stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=True)
@@ -194,6 +204,7 @@ def clang_format(filename: str, is_temp=True):
 GLOBAL_DICT = {
     "__builtins__": builtins,
     "use_source": use_source,
+    "use_output": use_output,
     "patch": patch,
     "rename": rename,
     "pack": pack,
@@ -209,6 +220,8 @@ GLOBAL_DICT = {
     "DO_BIG_JOBS": False,
     "PREFIX": DEFAULT_PREFIX,
     "PREFIX_U": DEFAULT_PREFIX_U,
+    "LOCATION": SCRIPT_DIR,
+    "TEMP": TEMP
 }
 
 
