@@ -23,3 +23,11 @@ prefix("bhasknk.h", PREFIX_U, PU)
 rename("bhasknk.h", [["#include \"", "#include \"yk__"]])
 copy_file("bhasknk.h", "yk__bhasknk.h", is_temp=False)
 clang_format("yk__bhasknk.h", is_temp=False)
+# -- yaksha runtime library --
+import os
+import shutil
+use_output()
+shutil.copy(os.path.join(LOCATION, "libs", "1st", "yk__lib.h"), os.path.join(TEMP, "yk__lib.h"))
+apply_includes("--remove-prefix . -I. yk__lib.h".split(" "))
+copy_file("yk__lib.h", "yk__lib.h", is_temp=False)
+clang_format("yk__lib.h", is_temp=False)
