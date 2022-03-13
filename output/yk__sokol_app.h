@@ -1996,7 +1996,7 @@ YK___SOKOL_PRIVATE double yk___sapp_timing_get_avg(yk___sapp_timing_t *t) {
 }
 /*== MACOS DECLARATIONS ======================================================*/
 #if defined(YK___SAPP_MACOS)
-@interface yk___sapp_macos_app_delegate : NSObject <YK__NSApplicationDelegate>
+@interface yk___sapp_macos_app_delegate : NSObject <NSApplicationDelegate>
 @end
 @interface yk___sapp_macos_window : NSWindow
 @end
@@ -2965,14 +2965,14 @@ YK___SOKOL_PRIVATE void yk___sapp_macos_discard_state(void) {
 YK___SOKOL_PRIVATE void yk___sapp_macos_run(const yk__sapp_desc *desc) {
   yk___sapp_init_state(desc);
   yk___sapp_macos_init_keytable();
-  [YK__NSApplication sharedApplication];
+  [NSApplication sharedApplication];
   // set the application dock icon as early as possible, otherwise
   // the dummy icon will be visible for a short time
   yk__sapp_set_icon(&yk___sapp.desc.icon);
   yk___sapp.macos.app_dlg = [[yk___sapp_macos_app_delegate alloc] init];
-  YK__NSApp.delegate = yk___sapp.macos.app_dlg;
-  [YK__NSApp run];
-  // NOTE: [YK__NSApp run] never returns, instead cleanup code
+  NSApp.delegate = yk___sapp.macos.app_dlg;
+  [NSApp run];
+  // NOTE: [NSApp run] never returns, instead cleanup code
   // must be put into applicationWillTerminate
 }
 /* MacOS entry function */
@@ -3141,7 +3141,7 @@ YK___SOKOL_PRIVATE void yk___sapp_macos_lock_mouse(bool lock) {
 }
 YK___SOKOL_PRIVATE void
 yk___sapp_macos_set_icon(const yk__sapp_icon_desc *icon_desc, int num_images) {
-  NSDockTile *dock_tile = YK__NSApp.dockTile;
+  NSDockTile *dock_tile = NSApp.dockTile;
   const int wanted_width = (int) dock_tile.size.width;
   const int wanted_height = (int) dock_tile.size.height;
   const int img_index = yk___sapp_image_bestmatch(icon_desc->images, num_images,
@@ -3292,14 +3292,14 @@ YK___SOKOL_PRIVATE void yk___sapp_macos_frame(void) {
   } else {
     [yk___sapp.macos.window center];
   }
-  YK__NSApp.activationPolicy = YK__NSApplicationActivationPolicyRegular;
-  [YK__NSApp activateIgnoringOtherApps:YES];
+  NSApp.activationPolicy = NSApplicationActivationPolicyRegular;
+  [NSApp activateIgnoringOtherApps:YES];
   [yk___sapp.macos.window makeKeyAndOrderFront:nil];
   yk___sapp_macos_update_dimensions();
   [NSEvent setMouseCoalescingEnabled:NO];
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:
-    (YK__NSApplication *)sender {
+    (NSApplication *)sender {
   YK___SOKOL_UNUSED(sender);
   return YES;
 }
@@ -3481,11 +3481,11 @@ YK___SOKOL_PRIVATE void yk___sapp_macos_poll_input_events() {
         for (;;) {
             // NOTE: using NSDefaultRunLoopMode here causes stuttering in the GL backend,
             // see: https://github.com/floooh/yk__sokol/issues/486
-            NSEvent* event = [YK__NSApp nextEventMatchingMask:mask untilDate:nil inMode:NSEventTrackingRunLoopMode dequeue:YES];
+            NSEvent* event = [NSApp nextEventMatchingMask:mask untilDate:nil inMode:NSEventTrackingRunLoopMode dequeue:YES];
             if (event == nil) {
                 break;
             }
-            [YK__NSApp sendEvent:event];
+            [NSApp sendEvent:event];
         }
     }
     */

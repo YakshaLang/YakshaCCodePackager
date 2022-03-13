@@ -3313,13 +3313,14 @@ int yk__sdsTest(void) {
 int main(void) { return yk__sdsTest(); }
 #endif
 #endif /* YK__SDS_IMPLEMENTATION */
+/*
+*/
 /**
  * Bunch of utilities
  * Copyright (C) 2021-2022 Bhathiya Perera (JaDogg)
  */
 #ifndef YK__BHALIB_SINGLE_HEADER
 #define YK__BHALIB_SINGLE_HEADER
-#define YK__BHALIB_BUF_SIZE 10 * 1024 * 1024;
 #include <stdio.h>
 #include <stdlib.h>
 // Default to malloc if not defined

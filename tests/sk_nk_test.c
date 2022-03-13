@@ -5,12 +5,9 @@
 //  sokol_gfx.h + sokol_nuklear.h + nuklear.h
 //
 //  Nuklear UI on github: https://github.com/Immediate-Mode-UI/Nuklear
+//  cc -DYK__SOKOL_METAL sk_nk_test.c sokol.m -I../output -fobjc-arc -framework Metal -framework Cocoa -framework MetalKit -framework Quartz -framework AudioToolbox
 //------------------------------------------------------------------------------
 // this is needed for the Nuklear example code further down
-#define YK__SOKOL_D3D11
-#define YK__SOKOL_GLUE_IMPL
-#define YK__SOKOL_GFX_IMPL
-#define YK__SOKOL_APP_IMPL
 #define _CRT_SECURE_NO_WARNINGS (1)
 #include "yk__sokol_app.h"
 #include "yk__sokol_gfx.h"

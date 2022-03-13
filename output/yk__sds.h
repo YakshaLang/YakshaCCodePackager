@@ -1,3 +1,4 @@
+
 /*
 Copyright (c) 2006-2014, Salvatore Sanfilippo <antirez at gmail dot com>
 
@@ -1432,3 +1433,5 @@ int yk__sdsTest(void) {
 int main(void) { return yk__sdsTest(); }
 #endif
 #endif /* YK__SDS_IMPLEMENTATION */
+/*
+*/

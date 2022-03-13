@@ -6,3 +6,4 @@ cmake-build-*
 bin/*
 !bin/.keep
 __pycache__
+**/.DS_Store

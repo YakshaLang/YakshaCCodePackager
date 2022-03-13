@@ -202,7 +202,7 @@ def parse_arguments(argv):
     return p
 
 
-def scan(argv: list[str]) -> list[str]:
+def scan(argv: List[str]) -> List[str]:
     p = parse_arguments(argv)
     a = get_code_tree(p)
     a.scan()
