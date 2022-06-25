@@ -1,5 +1,4 @@
-# potential-octo-invention
-> Currently, this is just a placeholder name for the project
+# Yaksha C Code Packager
 #### What does this do?
 * Convert C libraries to header only libraries with prefixed names/identifiers/macros.
 #### How it works?
