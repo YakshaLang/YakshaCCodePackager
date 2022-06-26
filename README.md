@@ -1,6 +1,10 @@
 # Yaksha C Code Packager
 #### What does this do?
 * Convert C libraries to header only libraries with prefixed names/identifiers/macros.
+#### Why?
+* Avoid name clash in libraries.
+* Easy auto completion.
+* Planned to be used in Yaksha programming language.
 #### How it works?
 * Provides a small python DSL to modify C code.
 * DSL Functions
