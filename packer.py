@@ -59,8 +59,8 @@ def use_output():
 
 
 def patch(patch_filename: str):
-    subprocess.run([PYTHON_EXE, PATCHER, os.path.join(INSTRUCTIONS, patch_filename)],
-                   stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=True)
+    subprocess.run([sys.executable, PATCHER, os.path.join(INSTRUCTIONS, patch_filename)],
+                   check=True)
 
 
 def rename(filename: str, renames: Iterable[Tuple[str, str]]):

@@ -1,0 +1,73 @@
+diff --git a/yk__stb_ds.h b/yk__stb_ds.h
+index 6040cfa..c517826 100644
+--- a/yk__stb_ds.h
++++ b/yk__stb_ds.h
+@@ -466,7 +466,7 @@ extern "C" {
+ extern void yk__stbds_rand_seed(size_t seed);
+ // these are the hash functions used internally if you want to test them or use them for other purposes
+ extern size_t yk__stbds_hash_bytes(void *p, size_t len, size_t seed);
+-extern size_t yk__stbds_hash_string(char *str, size_t seed);
++extern size_t yk__stbds_hash_string(yk__sds str, size_t seed);
+ // this is a simple string arena allocator, initialize with e.g. 'yk__stbds_string_arena my_arena={0}'.
+ typedef struct yk__stbds_string_arena yk__stbds_string_arena;
+ extern char *yk__stbds_stralloc(yk__stbds_string_arena *a, char *str);
+@@ -998,9 +998,14 @@ yk__stbds_make_hash_index(size_t slot_count, yk__stbds_hash_index *ot) {
+   (((val) << (n)) | ((val) >> (YK__STBDS_SIZE_T_BITS - (n))))
+ #define YK__STBDS_ROTATE_RIGHT(val, n)                                         \
+   (((val) >> (n)) | ((val) << (YK__STBDS_SIZE_T_BITS - (n))))
+-size_t yk__stbds_hash_string(char *str, size_t seed) {
++size_t yk__stbds_hash_string(yk__sds str, size_t seed) {
+   size_t hash = seed;
+-  while (*str) hash = YK__STBDS_ROTATE_LEFT(hash, 9) + (unsigned char) *str++;
++  size_t string_length = yk__sdslen(str);
++  if (string_length > 0) {
++    for (size_t i = 0; i < string_length; i++) {
++      hash = YK__STBDS_ROTATE_LEFT(hash, 9) + (unsigned char) *str++;
++    }
++  }
+   // Thomas Wang 64-to-32 bit mix function, hopefully also works in 32 bits
+   hash ^= seed;
+   hash = (~hash) + (hash << 18);
+@@ -1190,7 +1195,7 @@ static int yk__stbds_is_key_equal(void *a, size_t elemsize, void *key,
+                                   size_t keysize, size_t keyoffset, int mode,
+                                   size_t i) {
+   if (mode >= YK__STBDS_HM_STRING)
+-    return 0 == strcmp((char *) key,
++    return 0 == yk__sdscmp((char *) key,
+                        *(char **) ((char *) a + elemsize * i + keyoffset));
+   else
+     return 0 == memcmp(key, (char *) a + elemsize * i + keyoffset, keysize);
+@@ -1206,7 +1211,7 @@ void yk__stbds_hmfree_func(void *a, size_t elemsize) {
+       size_t i;
+       // skip 0th element, which is default
+       for (i = 1; i < yk__stbds_header(a)->length; ++i)
+-        YK__STBDS_FREE(NULL, *(char **) ((char *) a + elemsize * i));
++        yk__sdsfree(*(char **) ((char *) a + elemsize * i));
+     }
+     yk__stbds_strreset(&yk__stbds_hash_table(a)->string);
+   }
+@@ -1488,7 +1493,7 @@ void *yk__stbds_hmdel_key(void *a, size_t elemsize, void *key, size_t keysize,
+         b->index[i] = YK__STBDS_INDEX_DELETED;
+         if (mode == YK__STBDS_HM_STRING &&
+             table->string.mode == YK__STBDS_SH_STRDUP)
+-          YK__STBDS_FREE(NULL, *(char **) ((char *) a + elemsize * old_index));
++          yk__sdsfree(*(char **) ((char *) a + elemsize * old_index));
+         // if indices are the same, memcpy is a no-op, but back-pointer-fixup will fail, so skip
+         if (old_index != final_index) {
+           // swap delete
+@@ -1529,13 +1534,8 @@ void *yk__stbds_hmdel_key(void *a, size_t elemsize, void *key, size_t keysize,
+   }
+   /* NOTREACHED */
+ }
+-static char *yk__stbds_strdup(char *str) {
+-  // to keep replaceable allocator simple, we don't want to use strdup.
+-  // rolling our own also avoids problem of strdup vs _strdup
+-  size_t len = strlen(str) + 1;
+-  char *p = (char *) YK__STBDS_REALLOC(NULL, 0, len);
+-  memmove(p, str, len);
+-  return p;
++static yk__sds yk__stbds_strdup(yk__sds str) {
++  return yk__sdsdup(str);
+ }
+ #ifndef YK__STBDS_STRING_ARENA_BLOCKSIZE_MIN
+ #define YK__STBDS_STRING_ARENA_BLOCKSIZE_MIN 512u
