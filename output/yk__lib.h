@@ -3380,7 +3380,6 @@ char *yk__bhalib_read_file(const char *path, size_t *length, int *error) {
 }
 #endif
 #endif
-#include <stdint.h>
-#include <stdio.h>
 #include <stdbool.h>
-#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
