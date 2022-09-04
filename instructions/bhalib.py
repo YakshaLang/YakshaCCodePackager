@@ -28,6 +28,7 @@ import os
 import shutil
 use_output()
 shutil.copy(os.path.join(LOCATION, "libs", "1st", "yk__lib.h"), os.path.join(TEMP, "yk__lib.h"))
+shutil.copy(os.path.join(LOCATION, "libs", "1st", "yk__sort.h"), os.path.join(TEMP, "yk__sort.h"))
 shutil.copy(os.path.join(LOCATION, "output", "yk__stb_ds.h"), os.path.join(TEMP, "yk__stb_ds.h"))
 # This patch applies to yk__stb_ds
 # This allow to use the strdup method of stb_ds with sds by delegating to features of sds :) cool ha!
