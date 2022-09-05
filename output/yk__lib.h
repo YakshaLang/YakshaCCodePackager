@@ -3429,6 +3429,7 @@ Unknown license, asked in above link
 */
 #ifndef YK__SORT
 #define YK__SORT
+#include <stddef.h>
 /**
  * Comparison function, returns 0 if equal > 0 for larger and < 0 for smaller
  */
@@ -3467,7 +3468,7 @@ int yk__quicksort_ex(void *arr, size_t item_size, size_t elements,
 void yk__memswap(void *a, void *b, size_t item_size) {
   char *a_swap = (char *) a;
   char *b_swap = (char *) b;
-  char *a_end = a + item_size;
+  char *a_end = a_swap + item_size;
   while (a_swap < a_end) {
     char temp = *a_swap;
     *a_swap = *b_swap;
@@ -3485,8 +3486,8 @@ void yk__memswap(void *a, void *b, size_t item_size) {
  */
 #define yk__generic_swap(arr, pos1, pos2, item_size)                           \
   do {                                                                         \
-    yk__memswap((arr) + ((pos1) * (item_size)),                                \
-                (arr) + ((pos2) * (item_size)), item_size);                    \
+    yk__memswap(((char *) arr) + ((pos1) * (item_size)),                       \
+                ((char *) arr) + ((pos2) * (item_size)), item_size);           \
   } while (0)
 /**
  * Get an element of an array
@@ -3495,7 +3496,8 @@ void yk__memswap(void *a, void *b, size_t item_size) {
  * @param item_size size of a single element
  * @return
  */
-#define yk__generic_get(arr, pos, item_size) ((arr) + ((pos) * (item_size)))
+#define yk__generic_get(arr, pos, item_size)                                   \
+  ((void *) (((char *) arr) + ((pos) * (item_size))))
 int yk__quicksort_ex(void *arr, size_t item_size, size_t elements,
                      yk__compare_function cmp_func, void *single_elem_buffer) {
   size_t beg[YK__SORT_MAX_LEVELS], end[YK__SORT_MAX_LEVELS], L, R;
