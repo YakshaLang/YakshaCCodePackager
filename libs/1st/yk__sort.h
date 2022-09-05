@@ -181,6 +181,7 @@ int yk__quicksort_ex(void *arr, size_t item_size, size_t elements,
 int yk__quicksort(void *arr, size_t item_size, size_t elements,
                   yk__compare_function cmp_func) {
   char *single_elem_buffer = malloc(item_size + 1);
+  if (NULL == single_elem_buffer) return -1;
   single_elem_buffer[item_size] = 0;
   int return_value =
       yk__quicksort_ex(arr, item_size, elements, cmp_func, single_elem_buffer);
