@@ -20,7 +20,7 @@ pack(intro_files="LICENSE", public="sds.h", private="sdsalloc.h,sds.c", target="
 MSVC_FIX = """
 #if _MSC_VER && !__INTEL_COMPILER
 #define __attribute__(X)
-#define ssize_t size_t
+#define ssize_t intmax_t
 #endif
 """
 rename("yk__sds.h", [["#define YK____SDS_H", "#define YK____SDS_H\n" + MSVC_FIX]])
